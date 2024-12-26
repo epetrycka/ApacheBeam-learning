@@ -1,12 +1,35 @@
 from typing import List, Tuple, Dict, Iterable
 import apache_beam as beam
+import datetime
+import argparse
+from apache_beam.options.pipeline_options import PipelineOptions, StandardOptions
 
-percent_of_amount_to_clear_monthly = 0.7
+# Command-line argument parsing
+parser = argparse.ArgumentParser()
+parser.add_argument('--input',
+                    dest='input',
+                    required=True,
+                    help='Input file')
+parser.add_argument('--output',
+                    dest='output',
+                    required=True,
+                    help='Output file')
+
+
+path_arg, pipeline_args = parser.parse_known_args()
+
+input_pattern = path_arg.input
+output_pattern = path_arg.output
+
+options = PipelineOptions(pipeline_args + ['--region=us-central1'])
+
 
 def split(record: str) -> List[str]:
     return record.split(',')
 
 class ShowFraudPoints(beam.DoFn):
+    percent_of_amount_to_clear_monthly = 0.7
+    
     def process(self, element: List[str]) -> List[Tuple[str, int]]:
         customer = element[0]
         fraud_points = 0
@@ -15,7 +38,7 @@ class ShowFraudPoints(beam.DoFn):
         total_spend = float(element[6])
         cleared_amount = float(element[8])
 
-        if cleared_amount < (total_spend * percent_of_amount_to_clear_monthly):
+        if cleared_amount < (total_spend * 0.7):
             fraud_points += 1
 
         if total_spend == max_credit_limit and total_spend != cleared_amount:
@@ -37,10 +60,10 @@ def string(record: Tuple[str, Tuple[Iterable[int], Iterable[str]]]) -> str:
     names = ', '.join(record[1][1])
     return f"{record[0]}, {fraud_points}, {names}"
 
-with beam.Pipeline() as p:
+with beam.Pipeline(options=options) as p:
     input = (
         p
-        | 'Read informations about card users' >> beam.io.ReadFromText('./data/cards.txt', skip_header_lines=1)
+        | 'Read informations about card users' >> beam.io.ReadFromText(input_pattern, skip_header_lines=1)
         | 'Split by delimiter' >> beam.Map(split)
     )
 
@@ -61,5 +84,5 @@ with beam.Pipeline() as p:
         {defaulter, names}
         | 'Join names' >> beam.CoGroupByKey()
         | 'String plis' >> beam.Map(string)
-        | 'Write answers' >> beam.io.WriteToText('./data/defaulter_customers')
+        | 'Write answers' >> beam.io.WriteToText(output_pattern)
     )

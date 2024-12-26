@@ -1,6 +1,25 @@
 from typing import Iterable
 import apache_beam as beam
 import re
+import argparse
+from apache_beam.options.pipeline_options import PipelineOptions, StandardOptions
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument('--input',
+                    dest='input',
+                    required=True,
+                    help='Input file to process')
+
+parser.add_argument('--output',
+                    dest='output',
+                    required=True,
+                    help='Output file to write results to')
+
+path_args, pipeline_args = parser.parse_known_args()
+
+inputs_pattern = path_args.input
+output_pattern = path_args.output
 
 # def seperate_words(record):
 #     return re.split(r'[\[\](),:.\s]+', record)
@@ -19,10 +38,12 @@ class SumCounts(beam.DoFn):
 def map_to_type(record):
     return type(record[0])
 
-with beam.Pipeline() as p:
+options = PipelineOptions(pipeline_args)
+
+with beam.Pipeline(options=options) as p:
     input = (
         p
-        | 'Read from file' >> beam.io.ReadFromText('./data/data.txt')
+        | 'Read from file' >> beam.io.ReadFromText(inputs_pattern)
     )
 
     word_count = (
@@ -37,5 +58,8 @@ with beam.Pipeline() as p:
 
     output = (
         word_count
-        | 'Write to file' >> beam.io.WriteToText('./data/word_counter')
+        | 'Write to file' >> beam.io.WriteToText(output_pattern)
     )
+
+#input = ./data/data.txt
+#output = ./data/word_counter
