@@ -1,0 +1,16 @@
+Incerement the score of Player and its Team, where 1 kill = 1 score.
+
+For every kill a player has taken with a particular weapon-
+* if the battle time is between 10-20, then 4 points.
+* if battle time is between 20-30 then 3 points,
+* if battle time is between 31-40 then 2 points,
+* if battle time is >40, then 1 point.
+
+If the difference between the weapon rank of killer and elimineted player:
+* is more than 6 ranks then 3 points
+* is between 3 to 6 then 2 points
+* otherwise 1 point
+
+If the killer's location is not equal to eliminated player than assign 3 points
+
+Calculate the average points of a player per Game + weapon
