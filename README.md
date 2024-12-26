@@ -1,3 +1,5 @@
+Pipelines written in Apache Beam with both: Batch Processing and Streaming Processing. Implemented PubSub architecture.
+
 Bank Data - exercises to filter data about customers
 
 Streaming Data - easy streaming data generator with google cloud storage, PubSub
