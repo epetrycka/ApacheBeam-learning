@@ -87,15 +87,15 @@ Explore windowing, triggers, and stateful processing.
 Practice building and deploying scalable pipelines on Google Cloud Dataflow.
 
 ### TODO
-- Add metrics and monitoring (e.g., Stackdriver integration).
+- Add metrics and monitoring.
 
 - Visualize pipeline performance and outputs.
 
- - Expand streaming examples with side inputs / outputs.
+- Expand streaming examples with side inputs / outputs.
 
- - Integrate with BigQuery for final sinks.
+- Integrate with BigQuery for final sinks.
 
- - Add Terraform scripts for infrastructure provisioning.
+- Add Terraform scripts for infrastructure provisioning.
 
 ### References
 
