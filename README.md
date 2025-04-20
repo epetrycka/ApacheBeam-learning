@@ -10,7 +10,7 @@ These small-scale yet practical exercises are intended for learning how to proce
 
 ---
 
-## 📁 Project Overview
+## Project Overview
 
 ### Bank Data
 - **Type:** Batch Processing  
@@ -97,9 +97,8 @@ Practice building and deploying scalable pipelines on Google Cloud Dataflow.
 
  - Add Terraform scripts for infrastructure provisioning.
 
-📚 References
-Apache Beam Documentation
+### References
 
-GCP Dataflow Quickstart
+[Apache Beam Documentation](https://beam.apache.org/documentation/)
 
-Pub/Sub Concepts
+[GCP Data Analytics](https://cloud.google.com/docs/data)
